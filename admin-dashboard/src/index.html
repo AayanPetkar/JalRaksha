@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JalRaksha — Disaster Management Admin Console</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="brand">
+            <h1>JalRaksha 🛡️ Disaster Management Console</h1>
+        </div>
+        <div class="user-status">
+            <span>Official: District Collector, Sangli</span>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="metrics-bar">
+            <div class="card metric">
+                <h3>Active Alert Level</h3>
+                <p class="status-critical">🔴 CRITICAL</p>
+            </div>
+            <div class="card metric">
+                <h3>Affected Villages</h3>
+                <p>4 Villages</p>
+            </div>
+            <div class="card metric">
+                <h3>Population Exposed</h3>
+                <p>14,200 Citizens</p>
+            </div>
+            <div class="card metric">
+                <h3>Citizen Reports</h3>
+                <p>28 Unverified</p>
+            </div>
+        </section>
+
+        <section class="map-section">
+            <div class="card map-card">
+                <h2>Regional Flood Risk Map Overview</h2>
+                <div id="map-placeholder">
+                    <p>Mapbox / Vector Spatial Map Placeholder (Phase 12)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

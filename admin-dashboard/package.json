@@ -1,0 +1,12 @@
+{
+  "name": "jalraksha-admin-dashboard",
+  "version": "0.1.0",
+  "description": "JalRaksha Disaster Management Admin Console",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "serve src -p 3000"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}

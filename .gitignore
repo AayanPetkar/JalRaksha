@@ -1,0 +1,39 @@
+# Environment & Secrets
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Flutter / Dart
+.dart_tool/
+.fvm/
+.idea/
+.vscode/
+build/
+*.iml
+.packages
+.pub-cache/
+.pub/
+
+# Node / Web Dashboard
+node_modules/
+dist/
+npm-debug.log*
+
+# ML Artifacts (Keep models directory empty structure)
+ml/models/*.pkl
+ml/models/*.json
+!ml/models/.gitkeep
+
+# Operating System
+.DS_Store
+Thumbs.db
