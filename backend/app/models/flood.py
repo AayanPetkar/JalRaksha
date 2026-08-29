@@ -48,6 +48,8 @@ class RiskFactor(Base, TimestampMixin):
     flood_risk_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("flood_risks.id", ondelete="CASCADE"), nullable=False, index=True)
     factor_key: Mapped[str] = mapped_column(String(50), nullable=False)
     contribution_percentage: Mapped[float] = mapped_column(Float, nullable=False)
+    value: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    unit: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     description_en: Mapped[str] = mapped_column(String, nullable=False)
     description_mr: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     description_hi: Mapped[Optional[str]] = mapped_column(String, nullable=True)

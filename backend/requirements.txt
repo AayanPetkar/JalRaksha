@@ -7,6 +7,10 @@ geoalchemy2>=0.14.0
 psycopg2-binary>=2.9.9
 pyjwt>=2.8.0
 passlib[bcrypt]>=1.7.4
+# passlib 1.7.4's bcrypt self-test crashes against bcrypt>=4.1 (which removed
+# the `__about__` attribute passlib probes for). Pinning here keeps password
+# hashing (used by demo admin seeding and future auth work) working reliably.
+bcrypt<4.1
 python-multipart>=0.0.6
 requests>=2.31.0
 redis>=5.0.0

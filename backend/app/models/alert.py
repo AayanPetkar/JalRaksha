@@ -17,6 +17,7 @@ class Alert(Base, TimestampMixin):
     message_hi: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     issued_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
     expires_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    source_tag: Mapped[str] = mapped_column(String(30), default="OFFICIAL_DATA", nullable=False)
 
     notifications: Mapped[List["NotificationHistory"]] = relationship("NotificationHistory", back_populates="alert", cascade="all, delete-orphan")
 

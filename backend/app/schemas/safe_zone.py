@@ -11,6 +11,8 @@ class SafeZoneOut(BaseModel):
     is_active: bool
     is_verified: bool
     distance_meters: float = 0.0
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     contact_phone: Optional[str] = None
     district: Optional[str] = None
     source_tag: str = "OFFICIAL_DATA"

@@ -1,6 +1,6 @@
 import uuid
 from typing import Optional
-from sqlalchemy import String, Integer, Boolean, ForeignKey
+from sqlalchemy import String, Integer, Boolean, Float, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from geoalchemy2 import Geography
 from app.models.base import Base, TimestampMixin
@@ -12,6 +12,13 @@ class SafeZone(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(150), nullable=False)
     type: Mapped[str] = mapped_column(String(50), default="OFFICIAL_SHELTER", nullable=False) # 'OFFICIAL_SHELTER', 'RELIEF_CENTER', 'COMMUNITY_HALL', 'EVACUATION_CENTER'
     location: Mapped[bytes] = mapped_column(Geography(geometry_type="POINT", srid=4326), nullable=False)
+    # Plain-float mirror of `location`, matching the pattern already used by
+    # Location/CitizenReport, so latitude/longitude are cheaply readable via
+    # the ORM without depending on Geography WKB decoding (which the SQLite
+    # demo runtime cannot do losslessly). Nullable so the original
+    # PostGIS-only production seed script keeps working unchanged.
+    latitude: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    longitude: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     capacity: Mapped[int] = mapped_column(Integer, default=100, nullable=False)
     current_occupancy: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

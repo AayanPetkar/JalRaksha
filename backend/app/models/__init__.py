@@ -8,6 +8,7 @@ from app.models.environmental import EnvironmentalObservation
 from app.models.flood import FloodEvent, FloodRisk, RiskFactor
 from app.models.report import CitizenReport
 from app.models.alert import Alert, NotificationHistory
+from app.models.emergency_event import SafetyStatusEvent
 
 __all__ = [
     "Base",
@@ -29,4 +30,5 @@ __all__ = [
     "CitizenReport",
     "Alert",
     "NotificationHistory",
+    "SafetyStatusEvent",
 ]

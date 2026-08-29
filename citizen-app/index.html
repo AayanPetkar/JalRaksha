@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>JalRaksha — Flood Relief &amp; Safety (Demo)</title>
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+<div class="backdrop"></div>
+
+<main class="device" id="device">
+
+  <!-- ============ ENTRY SCREEN ============ -->
+  <section class="screen entry-screen" id="screen-entry" data-screen="entry">
+    <div class="entry-badge">DEMO MODE</div>
+    <div class="entry-content">
+      <div class="entry-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="56" height="56">
+          <path d="M32 4C32 4 12 28 12 42a20 20 0 0 0 40 0C52 28 32 4 32 4Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M22 42a10 10 0 0 0 10 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="entry-title">JalRaksha</h1>
+      <p class="entry-tagline">The Flood Relief &amp; Safety Expert</p>
+      <p class="entry-sub">Demo Mode — simulated data for the SIH demonstration</p>
+    </div>
+    <div class="entry-actions">
+      <button class="btn btn-primary btn-block" id="btn-enter-demo">Enter Demo</button>
+      <p class="entry-note" id="entry-status"></p>
+    </div>
+  </section>
+
+  <!-- ============ APP SHELL (post-login) ============ -->
+  <div class="app-shell" id="app-shell" hidden>
+
+    <header class="status-bar">
+      <span class="demo-pill">● DEMO MODE</span>
+      <button class="icon-btn" id="btn-refresh" title="Refresh now" aria-label="Refresh">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.75 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z"/></svg>
+      </button>
+    </header>
+
+    <!-- ---------- HOME ---------- -->
+    <section class="screen" id="screen-home" data-screen="home">
+      <div class="brand-row">
+        <h1 class="brand-title">JalRaksha</h1>
+        <p class="brand-loc">📍 <span id="home-village">Sangli Rural</span></p>
+      </div>
+
+      <div class="card risk-card" id="risk-card">
+        <div class="risk-card-loading" id="risk-loading">Reading live risk data…</div>
+        <div class="risk-card-body" id="risk-body" hidden>
+          <div class="risk-ring-wrap">
+            <svg class="risk-ring" viewBox="0 0 120 120" id="risk-ring-svg">
+              <circle class="risk-ring-track" cx="60" cy="60" r="52"></circle>
+              <circle class="risk-ring-fill" id="risk-ring-fill" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <div class="risk-ring-center">
+              <span class="risk-percent" id="risk-percent">--%</span>
+              <span class="risk-percent-label">risk score</span>
+            </div>
+          </div>
+          <p class="risk-level-label" id="risk-level-label">—</p>
+          <p class="risk-narrative" id="risk-narrative">—</p>
+          <button class="btn btn-outline btn-block" id="btn-why">Why am I at risk?</button>
+        </div>
+        <div class="risk-card-error" id="risk-error" hidden></div>
+      </div>
+
+      <div class="card alert-banner" id="home-alert-banner" hidden>
+        <div class="alert-banner-icon">⚠️</div>
+        <div class="alert-banner-body">
+          <p class="alert-banner-title">Critical Alert</p>
+          <p class="alert-banner-text" id="home-alert-text">Flood risk near your location has increased.</p>
+        </div>
+        <button class="btn btn-small" id="btn-view-alert">View Alert</button>
+      </div>
+
+      <div class="card safe-zone-card" id="home-safezone-card">
+        <div class="safe-zone-icon">🛡</div>
+        <div class="safe-zone-body">
+          <p class="safe-zone-title">Nearest Safe Zone</p>
+          <p class="safe-zone-name" id="home-safezone-name">Loading…</p>
+          <p class="safe-zone-distance" id="home-safezone-distance"></p>
+        </div>
+        <button class="btn btn-small" id="btn-view-map">View Map</button>
+      </div>
+
+      <div class="emergency-row">
+        <button class="btn btn-safe btn-block" id="btn-im-safe">I'M SAFE</button>
+        <button class="btn btn-help btn-block" id="btn-need-help">NEED HELP</button>
+      </div>
+
+      <button class="btn btn-report btn-block" id="btn-report-flood">Report Flood</button>
+
+      <p class="foot-disclaimer">AI-assisted demo · Not an official government prediction.</p>
+    </section>
+
+    <!-- ---------- MAP ---------- -->
+    <section class="screen" id="screen-map" data-screen="map">
+      <div class="screen-header">
+        <h2>Map</h2>
+        <span class="tag tag-demo">SIMULATED DEMO DATA</span>
+      </div>
+      <div class="map-wrap">
+        <div id="leaflet-map"></div>
+        <div class="map-loading" id="map-loading">Loading map…</div>
+      </div>
+      <div class="map-legend">
+        <span><i class="dot dot-me"></i> You</span>
+        <span><i class="dot dot-zone"></i> Safe zone</span>
+        <span><i class="dot dot-open"></i> Route open</span>
+        <span><i class="dot dot-blocked"></i> Route blocked</span>
+      </div>
+    </section>
+
+    <!-- ---------- ALERTS ---------- -->
+    <section class="screen" id="screen-alerts" data-screen="alerts">
+      <div class="screen-header">
+        <h2>Alerts</h2>
+      </div>
+      <div id="alerts-list" class="list-stack">
+        <div class="empty-state" id="alerts-loading">Checking for active alerts…</div>
+      </div>
+    </section>
+
+    <!-- ---------- EMERGENCY ---------- -->
+    <section class="screen" id="screen-emergency" data-screen="emergency">
+      <div class="screen-header">
+        <h2>Emergency Circle</h2>
+      </div>
+
+      <div class="card">
+        <p class="section-label">Demo emergency contacts</p>
+        <div class="contact-row">
+          <div class="contact-avatar">RP</div>
+          <div class="contact-info">
+            <p class="contact-name">Ramesh Patil <span class="tag tag-demo tag-inline">DEMO CONTACT</span></p>
+            <p class="contact-meta">Father · +91 98•••••111</p>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-avatar">SS</div>
+          <div class="contact-info">
+            <p class="contact-name">Sunita Shinde <span class="tag tag-demo tag-inline">DEMO CONTACT</span></p>
+            <p class="contact-meta">Neighbour · +91 98•••••222</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card emergency-actions-card">
+        <p class="section-label">Emergency actions</p>
+        <button class="btn btn-safe btn-block" id="btn-im-safe-2">I'M SAFE</button>
+        <button class="btn btn-help btn-block" id="btn-need-help-2">NEED HELP</button>
+        <div class="emergency-result" id="emergency-result" hidden></div>
+        <p class="foot-disclaimer">This records your status for the demo Emergency Circle. It does not contact real emergency services.</p>
+      </div>
+    </section>
+
+    <!-- ---------- REPORT ---------- -->
+    <section class="screen" id="screen-report" data-screen="report">
+      <div class="screen-header">
+        <h2>Report Flood</h2>
+        <span class="tag tag-citizen">CITIZEN REPORT</span>
+      </div>
+
+      <form class="card report-form" id="report-form">
+        <label class="field-label" for="report-category">Category</label>
+        <select class="field-input" id="report-category" required>
+          <option value="WATER_LOGGING">Water logging</option>
+          <option value="ROAD_BLOCKED">Road blocked</option>
+          <option value="BRIDGE_SUBMERGED">Bridge submerged</option>
+          <option value="TRAPPED_PERSON">Trapped person</option>
+          <option value="OTHER">Other</option>
+        </select>
+
+        <label class="field-label" for="report-description">Description</label>
+        <textarea class="field-input" id="report-description" rows="3" placeholder="What are you seeing?"></textarea>
+
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="report-lat">Latitude</label>
+            <input class="field-input" type="number" step="0.0001" id="report-lat" required>
+          </div>
+          <div>
+            <label class="field-label" for="report-lng">Longitude</label>
+            <input class="field-input" type="number" step="0.0001" id="report-lng" required>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline btn-small" id="btn-use-location">Use my current location</button>
+
+        <label class="field-label">Photo (optional)</label>
+        <div class="photo-placeholder">📷 Photo attachment — not available in this demo</div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="btn-submit-report">Submit Report</button>
+        <div class="report-result" id="report-result" hidden></div>
+      </form>
+
+      <div id="report-history"></div>
+    </section>
+
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-btn is-active" data-nav="home">
+        <span class="nav-icon" data-icon="home"></span><span>Home</span>
+      </button>
+      <button class="nav-btn" data-nav="map">
+        <span class="nav-icon" data-icon="map"></span><span>Map</span>
+      </button>
+      <button class="nav-btn" data-nav="alerts">
+        <span class="nav-icon" data-icon="alerts"></span><span>Alerts</span>
+        <span class="nav-badge" id="nav-alert-badge" hidden></span>
+      </button>
+      <button class="nav-btn" data-nav="emergency">
+        <span class="nav-icon" data-icon="emergency"></span><span>Emergency</span>
+      </button>
+      <button class="nav-btn" data-nav="report">
+        <span class="nav-icon" data-icon="report"></span><span>Report</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ============ WHY SHEET (modal) ============ -->
+  <div class="sheet-backdrop" id="why-backdrop" hidden>
+    <div class="sheet" id="why-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>Why am I at risk?</h2>
+        <button class="icon-btn" id="btn-close-why" aria-label="Close">✕</button>
+      </div>
+      <div class="sheet-tags">
+        <span class="tag tag-ai">AI-ASSISTED DEMO</span>
+        <span class="tag tag-demo">SIMULATED DEMO DATA</span>
+      </div>
+      <div class="lang-toggle" id="why-lang-toggle">
+        <button class="lang-btn is-active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="hi">हिं</button>
+        <button class="lang-btn" data-lang="mr">मर</button>
+      </div>
+      <div id="why-body" class="why-body">
+        <div class="empty-state">Loading risk factors…</div>
+      </div>
+      <p class="foot-disclaimer">This is an AI-generated demo estimate, not an official government prediction.</p>
+    </div>
+  </div>
+
+  <!-- ============ ROUTE SHEET (modal, reached from Map / Alerts) ============ -->
+  <div class="sheet-backdrop" id="routes-backdrop" hidden>
+    <div class="sheet" id="routes-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h2>Safest Route</h2>
+        <button class="icon-btn" id="btn-close-routes" aria-label="Close">✕</button>
+      </div>
+      <div id="routes-body" class="routes-body">
+        <div class="empty-state">Comparing available routes…</div>
+      </div>
+      <p class="route-disclaimer">Safest Available Route based on currently available data.</p>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast" hidden></div>
+
+</main>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script type="module" src="src/app.js"></script>
+</body>
+</html>

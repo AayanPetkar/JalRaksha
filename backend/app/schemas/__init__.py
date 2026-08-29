@@ -10,6 +10,7 @@ from app.schemas.emergency_circle import (
 from app.schemas.report import CitizenReportCreate, CitizenReportOut
 from app.schemas.alert import AlertOut
 from app.schemas.admin import AdminOverviewOut, DistressEventOut
+from app.schemas.route import RouteOut, SafestRouteResponseOut
 
 __all__ = [
     "UserRegister", "UserLogin", "TokenResponse",
@@ -21,5 +22,6 @@ __all__ = [
     "EmergencyCirclePreferenceOut", "ImSafeRequest", "NeedHelpRequest",
     "CitizenReportCreate", "CitizenReportOut",
     "AlertOut",
-    "AdminOverviewOut", "DistressEventOut"
+    "AdminOverviewOut", "DistressEventOut",
+    "RouteOut", "SafestRouteResponseOut"
 ]

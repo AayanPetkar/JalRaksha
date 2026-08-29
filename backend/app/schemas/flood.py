@@ -6,6 +6,8 @@ from pydantic import BaseModel, Field
 class RiskFactorOut(BaseModel):
     factor_key: str
     contribution_percentage: float
+    value: Optional[float] = None
+    unit: Optional[str] = None
     description_en: str
     description_mr: Optional[str] = None
     description_hi: Optional[str] = None
@@ -30,8 +32,10 @@ class FloodRiskOut(BaseModel):
     confidence_score: float = 0.85
     data_freshness_minutes: int = 5
     source_tag: str = "SIMULATED_DEMO_DATA"
+    is_demo_data: bool = True
     disclaimer: str = "AI prediction; not an official government warning."
     local_impact: FloodImpactOut
+    main_risk_factors: List[RiskFactorOut] = []
     evaluated_at: datetime
 
     class Config:

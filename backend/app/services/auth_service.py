@@ -59,3 +59,30 @@ def login_user(db: Session, data: UserLogin) -> TokenResponse:
         full_name=user.full_name,
         preferred_language=user.preferred_language
     )
+
+
+def demo_login(db: Session) -> TokenResponse:
+    """Logs in as the fixed seeded Demo Citizen account.
+
+    No OTP, no password, no Firebase - this exists purely to give the SIH
+    demo's citizen web client a valid session/JWT to call the authenticated
+    endpoints (GET /users/me, POST /reports, POST /emergency-circle/*) with.
+    """
+    from app.core.demo_seed import DEMO_CITIZEN_ID
+
+    user = db.query(User).filter(User.id == DEMO_CITIZEN_ID).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Demo citizen account not found. Ensure DEMO_MODE seeding has run."
+        )
+
+    token = create_access_token(subject=user.id)
+    return TokenResponse(
+        access_token=token,
+        token_type="bearer",
+        user_id=str(user.id),
+        phone_number=user.phone_number,
+        full_name=user.full_name,
+        preferred_language=user.preferred_language
+    )

@@ -57,6 +57,8 @@ def find_nearest_safe_zones(
                 "is_verified": safe_zone.is_verified,
                 "is_active": safe_zone.is_active,
                 "distance_meters": round(float(dist), 1) if dist is not None else 0.0,
+                "latitude": safe_zone.latitude,
+                "longitude": safe_zone.longitude,
                 "contact_phone": safe_zone.contact_phone,
                 "district": safe_zone.district,
                 "source_tag": safe_zone.source_tag
@@ -71,8 +73,14 @@ def find_nearest_safe_zones(
         safe_zones = db.scalars(stmt).all()
         output = []
         for sz in safe_zones:
-            # Fake parsing coordinates or fallback distance
-            dist = 1500.0 # fallback
+            # Real haversine distance using the plain lat/lng columns (kept in
+            # sync with the PostGIS `location` column) when available; falls
+            # back to a fixed placeholder only if a legacy row has no
+            # lat/lng recorded.
+            if sz.latitude is not None and sz.longitude is not None:
+                dist = calculate_haversine_distance(latitude, longitude, sz.latitude, sz.longitude)
+            else:
+                dist = 1500.0
             output.append({
                 "id": str(sz.id),
                 "name": sz.name,
@@ -81,12 +89,15 @@ def find_nearest_safe_zones(
                 "current_occupancy": sz.current_occupancy,
                 "is_verified": sz.is_verified,
                 "is_active": sz.is_active,
-                "distance_meters": dist,
+                "distance_meters": round(dist, 1),
+                "latitude": sz.latitude,
+                "longitude": sz.longitude,
                 "contact_phone": sz.contact_phone,
                 "district": sz.district,
                 "source_tag": sz.source_tag
             })
-        return output
+        output.sort(key=lambda item: item["distance_meters"])
+        return output[:limit]
 
 
 def find_nearby_citizen_reports(
