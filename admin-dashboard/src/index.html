@@ -1,51 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JalRaksha — Disaster Management Admin Console</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JalRaksha — Disaster Management Admin Console (Demo)</title>
+  <meta name="description" content="JalRaksha SIH prototype admin dashboard for flood disaster management — demo mode.">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="navbar">
-        <div class="brand">
-            <h1>JalRaksha 🛡️ Disaster Management Console</h1>
-        </div>
-        <div class="user-status">
-            <span>Official: District Collector, Sangli</span>
-        </div>
-    </header>
 
-    <main class="dashboard-container">
-        <section class="metrics-bar">
-            <div class="card metric">
-                <h3>Active Alert Level</h3>
-                <p class="status-critical">🔴 CRITICAL</p>
-            </div>
-            <div class="card metric">
-                <h3>Affected Villages</h3>
-                <p>4 Villages</p>
-            </div>
-            <div class="card metric">
-                <h3>Population Exposed</h3>
-                <p>14,200 Citizens</p>
-            </div>
-            <div class="card metric">
-                <h3>Citizen Reports</h3>
-                <p>28 Unverified</p>
-            </div>
-        </section>
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <div class="header-left">
+      <svg class="brand-icon" viewBox="0 0 64 64" fill="none">
+        <path d="M32 4C32 4 12 28 12 42a20 20 0 0 0 40 0C52 28 32 4 32 4Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M22 42a10 10 0 0 0 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="brand-name">JalRaksha</div>
+        <div class="brand-sub">Disaster Management Console</div>
+      </div>
+      <span class="demo-badge" id="demo-badge">DEMO MODE</span>
+    </div>
+    <div class="header-right">
+      <span class="header-role">District Collector, Sangli</span>
+      <span class="connection-indicator" id="connection-status">
+        <span class="connection-dot" id="connection-dot"></span>
+        <span id="connection-text">Connected</span>
+      </span>
+    </div>
+  </header>
 
-        <section class="map-section">
-            <div class="card map-card">
-                <h2>Regional Flood Risk Map Overview</h2>
-                <div id="map-placeholder">
-                    <p>Mapbox / Vector Spatial Map Placeholder (Phase 12)</p>
+  <!-- ============ MAIN DASHBOARD ============ -->
+  <main class="dashboard" id="dashboard">
+
+    <!-- Error Banner -->
+    <div class="error-banner" id="error-banner">
+      <span>⚠️</span>
+      <span id="error-banner-text">Unable to connect to JalRaksha backend. Please ensure the server is running on port 8000.</span>
+    </div>
+
+    <!-- ---- DEMO CONTROL PANEL ---- -->
+    <section class="control-panel" id="control-panel">
+      <span class="control-label">🎮 Demo Controls</span>
+      <button class="btn btn-flood" id="btn-simulate-flood" title="Escalate risk to CRITICAL">
+        <span>🔴</span> SIMULATE FLOOD
+      </button>
+      <button class="btn btn-block-road" id="btn-block-road" title="Block primary demo route">
+        <span>🚧</span> BLOCK ROAD
+      </button>
+      <button class="btn btn-restore" id="btn-restore-normal" title="Reset all demo state to baseline">
+        <span>✅</span> RESTORE NORMAL
+      </button>
+      <span class="tag tag-demo" style="margin-left:auto;">SIMULATED DEMO DATA</span>
+    </section>
+
+    <!-- ---- OVERVIEW CARDS ---- -->
+    <section class="overview-grid" id="overview-grid">
+      <div class="stat-card stat-risk" id="card-risk">
+        <div class="stat-header">
+          <span class="stat-icon">🌊</span>
+          <span class="stat-title">Current Risk</span>
+        </div>
+        <div class="stat-value level-LOW" id="overview-risk-level">LOW</div>
+        <div class="stat-sub" id="overview-risk-score">Score: 20%</div>
+      </div>
+      <div class="stat-card stat-alerts" id="card-alerts">
+        <div class="stat-header">
+          <span class="stat-icon">🔔</span>
+          <span class="stat-title">Active Alerts</span>
+        </div>
+        <div class="stat-value" id="overview-alerts-count">0</div>
+        <div class="stat-sub">active notifications</div>
+      </div>
+      <div class="stat-card stat-reports" id="card-reports">
+        <div class="stat-header">
+          <span class="stat-icon">📋</span>
+          <span class="stat-title">Citizen Reports</span>
+        </div>
+        <div class="stat-value" id="overview-reports-count">0</div>
+        <div class="stat-sub"><span id="overview-unverified-count">0</span> unverified</div>
+      </div>
+      <div class="stat-card stat-distress" id="card-distress">
+        <div class="stat-header">
+          <span class="stat-icon">🆘</span>
+          <span class="stat-title">Distress Signals</span>
+        </div>
+        <div class="stat-value" id="overview-distress-count">0</div>
+        <div class="stat-sub">NEED HELP requests</div>
+      </div>
+      <div class="stat-card stat-roads" id="card-roads">
+        <div class="stat-header">
+          <span class="stat-icon">🛣️</span>
+          <span class="stat-title">Affected Roads</span>
+        </div>
+        <div class="stat-value" id="overview-roads-count">0</div>
+        <div class="stat-sub">non-open segments</div>
+      </div>
+      <div class="stat-card stat-zones" id="card-zones">
+        <div class="stat-header">
+          <span class="stat-icon">🛡️</span>
+          <span class="stat-title">Safe Zones</span>
+        </div>
+        <div class="stat-value text-safe" id="overview-zones-count">0</div>
+        <div class="stat-sub">operational shelters</div>
+      </div>
+    </section>
+
+    <!-- ---- RISK DETAIL + MAP ---- -->
+    <div class="split-row">
+      <!-- Risk Detail Panel -->
+      <section class="panel" id="risk-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Flood Risk Assessment</h2>
+          <div style="display:flex;gap:0.4rem;">
+            <span class="tag tag-ai">AI-ASSISTED DEMO</span>
+            <span class="tag tag-demo">SIMULATED DEMO DATA</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="risk-section">
+            <div class="risk-gauge-container">
+              <div class="risk-ring-wrap">
+                <svg class="risk-ring" viewBox="0 0 120 120">
+                  <circle class="risk-ring-track" cx="60" cy="60" r="52"></circle>
+                  <circle class="risk-ring-fill" id="risk-ring-fill" cx="60" cy="60" r="52"></circle>
+                </svg>
+                <div class="risk-ring-center">
+                  <div class="risk-ring-percent" id="risk-percent">--%</div>
+                  <div class="risk-ring-label">risk score</div>
                 </div>
+              </div>
+              <div class="risk-level-text" id="risk-level-text">—</div>
+              <div class="risk-meta">
+                <span class="risk-meta-item" id="risk-source-tag">
+                  🏷️ <span id="risk-source-value">—</span>
+                </span>
+                <span class="risk-meta-item" id="risk-last-updated">
+                  🕐 <span id="risk-updated-value">—</span>
+                </span>
+              </div>
+              <p style="font-size:0.65rem;color:var(--text-muted);font-style:italic;text-align:center;margin-top:0.5rem;">
+                AI prediction; not an official government warning.
+              </p>
             </div>
-        </section>
-    </main>
+            <div>
+              <h3 style="font-size:0.78rem;font-weight:700;margin-bottom:0.75rem;color:var(--text-secondary);">Contributing Factors</h3>
+              <div class="risk-factors-list" id="risk-factors-list">
+                <div class="empty-state"><span class="empty-icon">📊</span> Loading factors…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <script src="app.js"></script>
+      <!-- Map Panel -->
+      <section class="panel" id="map-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Regional Overview Map</h2>
+          <span class="tag tag-demo">SIMULATED DEMO DATA</span>
+        </div>
+        <div class="map-legend-bar">
+          <span class="legend-item"><span class="legend-dot citizen"></span> Citizen</span>
+          <span class="legend-item"><span class="legend-dot safe-zone"></span> Safe Zone</span>
+          <span class="legend-item"><span class="legend-dot road-open"></span> Route Open</span>
+          <span class="legend-item"><span class="legend-dot road-blocked"></span> Route Blocked</span>
+        </div>
+        <div class="map-container" id="leaflet-map"></div>
+      </section>
+    </div>
+
+    <!-- ---- ROUTES ---- -->
+    <section class="panel" id="routes-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Route Status</h2>
+        <span class="tag tag-demo">SIMULATED DEMO DATA</span>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <div id="routes-list">
+          <div class="empty-state"><span class="empty-icon">🛣️</span> Loading routes…</div>
+        </div>
+        <div class="route-disclaimer">Safest Available Route based on currently available data.</div>
+      </div>
+    </section>
+
+    <!-- ---- DISTRESS + REPORTS (side by side) ---- -->
+    <div class="split-row">
+      <!-- Distress Signals -->
+      <section class="panel" id="distress-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Live Distress Signals</h2>
+          <span class="panel-badge tag-critical" id="distress-count-badge" style="display:none;">0</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="distress-table">
+            <thead>
+              <tr>
+                <th>Citizen</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="distress-tbody">
+              <tr><td colspan="4" class="empty-state"><span class="empty-icon">🆘</span> No distress signals received</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Active Alerts -->
+      <section class="panel" id="alerts-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Active Alerts</h2>
+          <span class="panel-badge tag-critical" id="alerts-count-badge" style="display:none;">0</span>
+        </div>
+        <div class="panel-body" style="padding:0;" id="alerts-list">
+          <div class="empty-state"><span class="empty-icon">🔔</span> No active alerts</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ---- CITIZEN REPORTS ---- -->
+    <section class="panel full-width" id="reports-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Citizen Report Queue</h2>
+        <div style="display:flex;gap:0.4rem;">
+          <span class="tag tag-citizen">CITIZEN REPORT</span>
+          <span class="panel-badge tag-unverified" id="reports-unverified-badge" style="display:none;">0 unverified</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="reports-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Location</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Source</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="reports-tbody">
+            <tr><td colspan="7" class="empty-state"><span class="empty-icon">📋</span> No citizen reports</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ---- FOOTER ---- -->
+  <footer class="dashboard-footer">
+    JalRaksha SIH Prototype — Simulated Demo Data · Not an official government system · AI-Assisted Demo
+  </footer>
+
+  <!-- ---- TOAST CONTAINER ---- -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

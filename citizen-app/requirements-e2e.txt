@@ -1,0 +1,8 @@
+# Test-only dependencies for citizen-app/e2e_test.py (the Playwright
+# browser-driven end-to-end demo-flow script).
+#
+# NOT part of the backend application (backend/requirements.txt) and NOT
+# required to run the normal test suite (`pytest`). Install only if you
+# want to run the E2E script itself — see citizen-app/README.md.
+playwright
+requests
