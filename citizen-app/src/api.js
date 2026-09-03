@@ -2,7 +2,7 @@
 // Backend base URL is configurable via ?api=<url> in the page URL,
 // defaulting to the standard local dev server.
 const params = new URLSearchParams(window.location.search);
-export const API_BASE = params.get('api') || 'http://localhost:8000/api/v1';
+export const API_BASE = params.get('api') || 'https://jalraksha-backend.onrender.com/api/v1';
 
 export class ApiError extends Error {
   constructor(message, status) {
