@@ -10,7 +10,7 @@
 
   // ── API Configuration ──────────────────────────────────────────
   const params = new URLSearchParams(window.location.search);
-  const API_BASE = params.get('api') || 'http://localhost:8000/api/v1';
+const API_BASE = params.get('api') || 'https://jalraksha-backend.onrender.com/api/v1';
 
   // ── Polling ────────────────────────────────────────────────────
   const POLL_INTERVAL_MS = 4000;
