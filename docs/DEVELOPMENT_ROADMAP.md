@@ -142,7 +142,7 @@ This document specifies the staged 15-phase implementation plan for building **J
 
 ### PHASE 15 — SIH Demonstration & Pitch Mode
 - **Goal**: Configure synthetic demo data provider, pre-populated demonstration scenarios, and presentation pitch mode.
-- **Features**: Demo mode toggle in app, pre-seeded flood escalation scenario for Sangli district, live dynamic re-routing demonstration.
+- **Features**: Demo mode toggle in app, pre-seeded flood escalation scenario for Kurla district, live dynamic re-routing demonstration.
 - **Dependencies**: Phase 1 through Phase 14.
 - **Files/Modules Involved**: `ml/src/data_loader.py`, `database/init.sql`, `mobile/lib/core/config/demo_config.dart`.
 - **Tests Required**: Demo scenario dry-run walkthrough.

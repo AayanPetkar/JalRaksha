@@ -29,7 +29,7 @@ def get_current_flood_risk(db: Session, latitude: float = 19.0760, longitude: fl
         return FloodRiskOut(
             id=DEMO_RISK_ID,
             village_id=DEMO_VILLAGE_ID,
-            village_name="Sangli Rural",
+            village_name="Kurla, Mumbai",
             risk_score=20.0,
             risk_level="LOW",
             confidence_score=0.80,
@@ -52,7 +52,7 @@ def get_current_flood_risk(db: Session, latitude: float = 19.0760, longitude: fl
     return FloodRiskOut(
         id=risk.id,
         village_id=risk.village_id,
-        village_name="Sangli Rural",
+        village_name="Kurla Rural",
         risk_score=risk.risk_score,
         risk_level=risk.risk_level,
         confidence_score=risk.confidence_score,

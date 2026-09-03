@@ -117,9 +117,9 @@ def test_user_and_emergency_circle_relationships(db_session):
 def test_village_polygon_and_infrastructure(db_session):
     """Test creation of village boundary polygon and infrastructure relationships."""
     village = Village(
-        village_code="VIL-SANGLI-01",
-        name_en="Sangli Rural",
-        district="Sangli",
+        village_code="VIL-KURLA-01",
+        name_en="Kurla Rural",
+        district="Kurla",
         state="Maharashtra",
         boundary=WKTElement("POLYGON((72.870 19.070, 72.890 19.070, 72.890 19.090, 72.870 19.090, 72.870 19.070))", srid=4326),
         centroid=WKTElement("POINT(72.880 19.080)", srid=4326),
@@ -130,7 +130,7 @@ def test_village_polygon_and_infrastructure(db_session):
 
     infra = Infrastructure(
         village_id=village.id,
-        name="Sangli ZP High School",
+        name="Kurla ZP High School",
         type="SCHOOL",
         location=WKTElement("POINT(72.875 19.075)", srid=4326),
         elevation_meters=14.5,
@@ -141,21 +141,21 @@ def test_village_polygon_and_infrastructure(db_session):
 
     infra_items = find_infrastructure_in_village(db_session, str(village.id))
     assert len(infra_items) == 1
-    assert infra_items[0]["name"] == "Sangli ZP High School"
+    assert infra_items[0]["name"] == "Kurla ZP High School"
     assert infra_items[0]["type"] == "SCHOOL"
 
 
 def test_nearest_verified_safe_zone_query(db_session):
     """Mandatory Test: Given user coordinates, find nearest VERIFIED & OPERATIONAL safe zone."""
     sz_verified = SafeZone(
-        name="Sangli Community Hall",
+        name="Kurla Community Hall",
         type="OFFICIAL_SHELTER",
         location=WKTElement("POINT(72.8850 19.0850)", srid=4326),
         capacity=500,
         current_occupancy=50,
         is_active=True,
         is_verified=True,
-        district="Sangli",
+        district="Kurla",
         source_tag="SIMULATED_DEMO_DATA"
     )
     sz_unverified = SafeZone(
@@ -165,7 +165,7 @@ def test_nearest_verified_safe_zone_query(db_session):
         capacity=200,
         is_active=True,
         is_verified=False,
-        district="Sangli",
+        district="Kurla",
         source_tag="SIMULATED_DEMO_DATA"
     )
     db_session.add_all([sz_verified, sz_unverified])
@@ -180,7 +180,7 @@ def test_nearest_verified_safe_zone_query(db_session):
         verified_only=True
     )
     assert len(results) >= 1
-    assert results[0]["name"] == "Sangli Community Hall"
+    assert results[0]["name"] == "Kurla Community Hall"
     assert results[0]["is_verified"] is True
     assert results[0]["is_active"] is True
     assert results[0]["source_tag"] == "SIMULATED_DEMO_DATA"

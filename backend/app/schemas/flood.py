@@ -26,7 +26,7 @@ class FloodImpactOut(BaseModel):
 class FloodRiskOut(BaseModel):
     id: uuid.UUID
     village_id: uuid.UUID
-    village_name: str = "Sangli Rural"
+    village_name: str = "Kurla, Mumbai"
     risk_score: float = Field(..., ge=0.0, le=100.0)
     risk_level: str = Field(..., example="CRITICAL") # 'LOW', 'WATCH', 'PREPARE', 'CRITICAL'
     confidence_score: float = 0.85

@@ -125,7 +125,7 @@
 {
   "status": "LOCATION_UPDATED",
   "village_id": "v-1029",
-  "village_name": "Sangli Rural"
+  "village_name": "Kurla Rural"
 }
 ```
 
@@ -229,7 +229,7 @@
 ```json
 {
   "village_id": "v-1029",
-  "village_name": "Sangli Rural",
+  "village_name": "Kurla Rural",
   "flood_risk_score": 84.0,
   "risk_level": "CRITICAL",
   "confidence_score": 0.92,
@@ -293,7 +293,7 @@
 ```json
 {
   "id": "sz-401",
-  "name": "Sangli Community Hall",
+  "name": "Kurla Community Hall",
   "type": "OFFICIAL_SHELTER",
   "distance_km": 2.4,
   "estimated_travel_time_minutes": 8,
@@ -373,12 +373,12 @@
 
 ### 9.1 Get Regional Flood Risk Map Overview
 - **HTTP Method**: `GET`
-- **URL**: `/admin/map-overview?district=Sangli`
+- **URL**: `/admin/map-overview?district=Kurla`
 - **Auth**: Admin Bearer Token Required
 - **Response (200 OK)**:
 ```json
 {
-  "district": "Sangli",
+  "district": "Kurla",
   "active_alert_level": "CRITICAL",
   "total_affected_villages": 4,
   "total_population_exposed": 14200,
@@ -387,7 +387,7 @@
   "villages": [
     {
       "village_id": "v-1029",
-      "name": "Sangli Rural",
+      "name": "Kurla Rural",
       "risk_score": 84.0,
       "risk_level": "CRITICAL"
     }

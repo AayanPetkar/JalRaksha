@@ -410,7 +410,7 @@
         iconAnchor: [7, 7],
       });
       L.marker(CITIZEN_COORDS, { icon: citizenIcon })
-        .bindPopup('<strong>Demo Citizen</strong><br>Sangli Rural<br><em style="font-size:0.8em">SIMULATED DEMO DATA</em>')
+        .bindPopup('<strong>Demo Citizen</strong><br>Kurla, Mumbai<br><em style="font-size:0.8em">SIMULATED DEMO DATA</em>')
         .addTo(map);
 
       // Delay resize fix for tabs / hidden containers

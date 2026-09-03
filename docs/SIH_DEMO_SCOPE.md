@@ -123,7 +123,7 @@ engines, offline support, multilingual completeness, scale, or hardening.
 
 ## 5. Demo Data Strategy
 
-- All demo content is centered on the existing seeded **Sangli Rural**
+- All demo content is centered on the existing seeded **Kurla Rural**
   village and its infrastructure, safe zones, and roads (see
   `database/seed_data.py`).
 - A fixed **demo citizen account** and a fixed **demo admin account** are

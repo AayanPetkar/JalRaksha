@@ -2,7 +2,7 @@
 
 This is DELIBERATELY SEPARATE from `database/seed_data.py` (the original
 PostgreSQL/PostGIS-oriented seed, which seeds a mid-flood CRITICAL scenario
-for Sangli Rural). That file is left untouched for future production/Docker
+for Kurla Rural). That file is left untouched for future production/Docker
 use.
 
 This module seeds a **baseline LOW-risk** starting state for the live SIH
@@ -44,7 +44,7 @@ DEMO_SOURCE_TAG = "SIMULATED_DEMO_DATA"
 #
 # The village / infrastructure / safe-zone IDs intentionally match
 # `database/seed_data.py` and `app/services/risk_service.py` so the same
-# "Sangli Rural" scenario and the same DEMO_RISK_ID the risk service already
+# "Kurla Rural" scenario and the same DEMO_RISK_ID the risk service already
 # looks up resolve consistently across the whole demo build.
 # ---------------------------------------------------------------------------
 VILLAGE_ID = uuid.UUID("11111111-1111-1111-1111-111111111111")
@@ -99,11 +99,11 @@ def seed_demo_data(db: Session) -> None:
     # 1. Village -----------------------------------------------------------
     village = Village(
         id=VILLAGE_ID,
-        village_code="VIL-SANGLI-01",
-        name_en="Sangli Rural",
-        name_mr="सांगली ग्रामीण",
-        name_hi="सांगली ग्रामीण",
-        district="Sangli",
+        village_code="VIL-KURLA-01",
+        name_en="Kurla Rural",
+        name_mr="कुर्ला ग्रामीण",
+        name_hi="कुर्ला ग्रामीण",
+        district="Kurla",
         state="Maharashtra",
         population=14200,
         boundary=WKTElement(
@@ -120,7 +120,7 @@ def seed_demo_data(db: Session) -> None:
         Infrastructure(
             id=INFRA_SCHOOL_ID,
             village_id=VILLAGE_ID,
-            name="Sangli ZP High School",
+            name="Kurla ZP High School",
             type="SCHOOL",
             location=WKTElement("POINT(72.875 19.075)", srid=4326),
             elevation_meters=14.5,
@@ -167,7 +167,7 @@ def seed_demo_data(db: Session) -> None:
                 road_type="VILLAGE_ROAD",
                 path=WKTElement("LINESTRING(72.879 19.078, 72.882 19.082, 72.885 19.085)", srid=4326),
                 base_cost_meters=2400.0,
-                district="Sangli",
+                district="Kurla",
                 source_tag=DEMO_SOURCE_TAG,
             ),
             RoadCondition(
@@ -186,7 +186,7 @@ def seed_demo_data(db: Session) -> None:
                 road_type="VILLAGE_ROAD",
                 path=WKTElement("LINESTRING(72.879 19.078, 72.884 19.083, 72.890 19.089)", srid=4326),
                 base_cost_meters=3100.0,
-                district="Sangli",
+                district="Kurla",
                 source_tag=DEMO_SOURCE_TAG,
             ),
             RoadCondition(
@@ -205,7 +205,7 @@ def seed_demo_data(db: Session) -> None:
                 road_type="HIGHWAY",
                 path=WKTElement("LINESTRING(72.879 19.078, 72.883 19.086, 72.888 19.090)", srid=4326),
                 base_cost_meters=4200.0,
-                district="Sangli",
+                district="Kurla",
                 source_tag=DEMO_SOURCE_TAG,
             ),
             RoadCondition(
@@ -226,7 +226,7 @@ def seed_demo_data(db: Session) -> None:
     safe_zones = [
         SafeZone(
             id=SAFE_ZONE_1_ID,
-            name="Sangli Community Hall",
+            name="Kurla Community Hall",
             type="OFFICIAL_SHELTER",
             location=WKTElement("POINT(72.8850 19.0850)", srid=4326),
             latitude=19.0850,
@@ -236,12 +236,12 @@ def seed_demo_data(db: Session) -> None:
             is_active=True,
             is_verified=True,
             contact_phone="+919876500111",
-            district="Sangli",
+            district="Kurla",
             source_tag=DEMO_SOURCE_TAG,
         ),
         SafeZone(
             id=SAFE_ZONE_2_ID,
-            name="Sangli Relief Center",
+            name="Kurla Relief Center",
             type="RELIEF_CENTER",
             location=WKTElement("POINT(72.8900 19.0890)", srid=4326),
             latitude=19.0890,
@@ -251,7 +251,7 @@ def seed_demo_data(db: Session) -> None:
             is_active=True,
             is_verified=True,
             contact_phone="+919876500222",
-            district="Sangli",
+            district="Kurla",
             source_tag=DEMO_SOURCE_TAG,
         ),
     ]
@@ -261,7 +261,7 @@ def seed_demo_data(db: Session) -> None:
     # 5. Environmental observation — LOW-risk baseline values ----------------
     observation = EnvironmentalObservation(
         id=ENV_OBSERVATION_ID,
-        station_id="STN-SANGLI-DEMO-01",
+        station_id="STN-KURLA-DEMO-01",
         village_id=VILLAGE_ID,
         rainfall_mm=18.0,
         river_water_level_m=1.2,
@@ -368,7 +368,7 @@ def seed_demo_data(db: Session) -> None:
         email=DEMO_ADMIN_EMAIL,
         password_hash=get_password_hash(DEMO_ADMIN_PASSWORD),
         role="DISASTER_OFFICIAL",
-        jurisdiction_district="Sangli",
+        jurisdiction_district="Kurla",
     )
     db.merge(demo_admin)
 

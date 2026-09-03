@@ -19,7 +19,7 @@ from app.models.report import CitizenReport
 DEMO_SOURCE_TAG = "SIMULATED_DEMO_DATA"
 
 def seed_database():
-    """Seeds synthetic demo dataset for Sangli District, Maharashtra."""
+    """Seeds synthetic demo dataset for Kurla District, Maharashtra."""
     print("Starting JalRaksha Synthetic Database Seeding...")
     db = SessionLocal()
 
@@ -27,11 +27,11 @@ def seed_database():
         # 1. Seed Village
         village = Village(
             id=uuid.UUID("11111111-1111-1111-1111-111111111111"),
-            village_code="VIL-SANGLI-01",
-            name_en="Sangli Rural",
-            name_mr="सांगली ग्रामीण",
-            name_hi="सांगली ग्रामीण",
-            district="Sangli",
+            village_code="VIL-KURLA-01",
+            name_en="Kurla Rural",
+            name_mr="कुर्ला ग्रामीण",
+            name_hi="कुर्ला ग्रामीण",
+            district="Kurla",
             state="Maharashtra",
             population=14200,
             boundary=WKTElement("POLYGON((72.870 19.070, 72.890 19.070, 72.890 19.090, 72.870 19.090, 72.870 19.070))", srid=4326),
@@ -45,7 +45,7 @@ def seed_database():
             Infrastructure(
                 id=uuid.UUID("22222222-2222-2222-2222-222222222201"),
                 village_id=village.id,
-                name="Sangli ZP High School",
+                name="Kurla ZP High School",
                 type="SCHOOL",
                 location=WKTElement("POINT(72.875 19.075)", srid=4326),
                 elevation_meters=14.5,
@@ -83,7 +83,7 @@ def seed_database():
             road_type="HIGHWAY",
             path=WKTElement("LINESTRING(72.870 19.070, 72.880 19.080, 72.890 19.090)", srid=4326),
             base_cost_meters=2400.0,
-            district="Sangli",
+            district="Kurla",
             source_tag=DEMO_SOURCE_TAG
         )
         db.merge(road_a)
@@ -101,7 +101,7 @@ def seed_database():
         # 4. Seed Safe Zones
         sz1 = SafeZone(
             id=uuid.UUID("44444444-4444-4444-4444-444444444401"),
-            name="Sangli Community Hall",
+            name="Kurla Community Hall",
             type="OFFICIAL_SHELTER",
             location=WKTElement("POINT(72.8850 19.0850)", srid=4326),
             capacity=500,
@@ -109,12 +109,12 @@ def seed_database():
             is_active=True,
             is_verified=True,
             contact_phone="+919876500111",
-            district="Sangli",
+            district="Kurla",
             source_tag=DEMO_SOURCE_TAG
         )
         sz2 = SafeZone(
             id=uuid.UUID("44444444-4444-4444-4444-444444444402"),
-            name="Sangli Relief Center",
+            name="Kurla Relief Center",
             type="RELIEF_CENTER",
             location=WKTElement("POINT(72.8900 19.0890)", srid=4326),
             capacity=300,
@@ -122,7 +122,7 @@ def seed_database():
             is_active=True,
             is_verified=True,
             contact_phone="+919876500222",
-            district="Sangli",
+            district="Kurla",
             source_tag=DEMO_SOURCE_TAG
         )
         db.merge(sz1)
@@ -131,7 +131,7 @@ def seed_database():
         # 5. Seed Environmental Observation
         obs = EnvironmentalObservation(
             id=uuid.UUID("55555555-5555-5555-5555-555555555501"),
-            station_id="STN-SANGLI-01",
+            station_id="STN-KURLA-01",
             village_id=village.id,
             rainfall_mm=125.0,
             river_water_level_m=4.2,
@@ -145,8 +145,8 @@ def seed_database():
         # 6. Seed Flood Event & Risk
         flood_event = FloodEvent(
             id=uuid.UUID("66666666-6666-6666-6666-666666666601"),
-            event_title="Sangli Monsoon Surge 2026",
-            affected_district="Sangli",
+            event_title="Kurla Monsoon Surge 2026",
+            affected_district="Kurla",
             severity="CRITICAL",
             started_at=datetime.now(timezone.utc),
             source_tag=DEMO_SOURCE_TAG

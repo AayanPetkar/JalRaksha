@@ -74,8 +74,8 @@ def simulate_flood(db: Session) -> FloodRisk:
     if not flood_event:
         flood_event = FloodEvent(id=DEMO_FLOOD_EVENT_ID)
         db.add(flood_event)
-    flood_event.event_title = "[DEMO] Simulated Flood Event - Sangli Rural"
-    flood_event.affected_district = "Sangli"
+    flood_event.event_title = "[DEMO] Simulated Flood Event - Kurla Rural"
+    flood_event.affected_district = "Kurla"
     flood_event.severity = "CRITICAL"
     flood_event.started_at = now
     flood_event.ended_at = None
@@ -126,15 +126,15 @@ def simulate_flood(db: Session) -> FloodRisk:
     alert.alert_level = "CRITICAL"
     alert.title = "[DEMO] Simulated Flood Alert"
     alert.message_en = (
-        "SIMULATED DEMO ALERT: Flood risk in Sangli Rural has been simulated as "
+        "SIMULATED DEMO ALERT: Flood risk in Kurla Rural has been simulated as "
         "CRITICAL for this demonstration. This is not an official government warning."
     )
     alert.message_mr = (
-        "सिम्युलेटेड डेमो सूचना: सांगली ग्रामीण मधील पुराचा धोका या प्रात्यक्षिकासाठी गंभीर "
+        "सिम्युलेटेड डेमो सूचना: कुर्ला ग्रामीण मधील पुराचा धोका या प्रात्यक्षिकासाठी गंभीर "
         "(CRITICAL) म्हणून सिम्युलेट केला आहे. हा अधिकृत सरकारी इशारा नाही."
     )
     alert.message_hi = (
-        "सिम्युलेटेड डेमो चेतावनी: सांगली ग्रामीण में बाढ़ का खतरा इस प्रदर्शन के लिए गंभीर "
+        "सिम्युलेटेड डेमो चेतावनी: कुर्ला ग्रामीण में बाढ़ का खतरा इस प्रदर्शन के लिए गंभीर "
         "(CRITICAL) के रूप में सिम्युलेट किया गया है। यह कोई आधिकारिक सरकारी चेतावनी नहीं है।"
     )
     alert.issued_at = now
